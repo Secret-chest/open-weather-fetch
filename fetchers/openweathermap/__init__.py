@@ -147,9 +147,9 @@ def get_icon_path(weather_icon_code):
         weather_icon_name = aw_icon_map[weather_icon_code] + ".svg"
         weather_icon_url = "https://www.accuweather.com/assets/images/weather-icons/v2a/" + weather_icon_name
 
-    weather_icon_path = weather["icon_directory"] + "/" + weather_icon_name
-    print(f"Checking for icon {weather_icon_path}")
+    weather_icon_path = weather["icon_directory"] + "/openweathermap-" + weather_icon_name
     if not os.path.exists(weather_icon_path):
+        print(f"{datetime.now().strftime('[%H:%M:%S]')} openweathermap: Downloading icon {weather_icon_path}")
         img_data = requests.get(weather_icon_url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}).content
         with open(weather_icon_path, 'wb') as weather_icon:
             weather_icon.write(img_data)
@@ -158,15 +158,15 @@ def get_icon_path(weather_icon_code):
 
 def get_weather_info():
     if weather["api_key"] is None:
-        print("Set OpenWeatherMap api key to enable weather updates.")
+        print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Set OpenWeatherMap api key to enable weather updates.")
         return
     if weather["location_key"] is None:
-        print("Set OpenWeatherMap location to get localized weather updates.")
+        print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Set OpenWeatherMap location to get localized weather updates.")
         return
 
     current_time = datetime.now().time()
     formatted_time = current_time.strftime("%l:%M:%S")
-    print(formatted_time, "- Retrieving weather information..")
+    print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Retrieving weather information..")
 
     if weather["metric_units"] is True:
         units = "metric"
@@ -183,7 +183,7 @@ def get_weather_info():
         weather["temperature"] = str(int(weather_data["main"]["temp"])) + "°C"
     else:
         weather["temperature"] = str(int(weather_data["main"]["temp"])) + "°F"
-    print(f"Weather information for {weather_data["name"]}, {weather_data["sys"]["country"]}: {weather["temperature"]} - {weather_data["weather"][0]["description"]}")
+    print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Weather information for {weather_data["name"]}, {weather_data["sys"]["country"]}: {weather["temperature"]} - {weather_data["weather"][0]["description"]}")
     data = {
         "time": weather_data["dt"],
         "location": {
@@ -246,35 +246,17 @@ def get_measurement_type_for_gnu():
         return "metric"
     return "imperial"
 
-def main():
-    locale.setlocale(locale.LC_ALL, "")
-    parser = argparse.ArgumentParser(
-        prog="Weather",
-        description="Get weather data with icon.",
-        epilog="Copyright (c) 2026 Scott Moreau <oreaus@gmail.com>\nCopyright (c) 2026 roundabout-host.com <root@roundabout-host.com>",
-        formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("-l", "--location")
-    parser.add_argument("-k", "--apikey")
-    parser.add_argument("-c", "--classic-icons", action="store_true")
-    parser.add_argument("-u", "--units")
-    parser.add_argument("-d", "--debug", action="store_true")
-    args = parser.parse_args()
-    if args.apikey is None:
-        print("Provide OpenWeatherMap APIKEY with -k or --apikey")
-        exit(-1)
-    if args.location is None:
-        print("Provide OpenWeatherMap location with -l or --location")
-        exit(-1)
-    weather["location_key"] = args.location
-    weather["api_key"] = args.apikey
-    weather["classic-icons"] = args.classic_icons
-    units = args.units or get_measurement_type_for_gnu()
+def fetch_weather(location, apikey, classic_icons=False, units=None, debug=False):
+    weather["location_key"] = location
+    weather["api_key"] = apikey
+    weather["classic-icons"] = classic_icons
+    units = units or get_measurement_type_for_gnu()
     if units == "metric":
         weather["metric_units"] = True
     elif units == "imperial":
         weather["metric_units"] = False
 
-    weather["debug"] = args.debug
+    weather["debug"] = debug
 
     weather["icon_directory"] = os.getenv("HOME") + "/.local/share/weather/icons"
     icon_dir = Path(weather["icon_directory"])
@@ -287,6 +269,3 @@ def main():
         data_dir.mkdir(parents=True, exist_ok=True)
 
     get_weather_info()
-
-if __name__ == "__main__":
-    main()

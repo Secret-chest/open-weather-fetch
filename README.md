@@ -20,21 +20,9 @@ windowed weather app might want to read all cities.
 
 ## Downloading weather data
 
-There will be a systemd user unit, but even without that, you can run one of
-the backends periodically like this bash:
+Just run the provided `weather.py` after putting the `fetchers` in
+`~/.local/share/weather/fetchers` and the config in
+`~/.config/weather/config.json`. The fetchers can also be in
+`/usr/share/weather/fetchers` if you want to install this system-wide.
 
-~~~bash
-while true; do python fetchers/example.py [options]; sleep 10m; done
-~~~
-
-Each backend has at least the following parameters:
-
-* `-l`, `--location`: the city name to download weather data for (required).
-* `-u`, `--units`: `metric` or `imperial` to override the unit type. If not
-  specified, it will try to use locale services to find the system-set one.
-  Note that if you are in the USA, you should set your locale to `en_US.UTF-8`
-  and not `C.UTF-8` as is common on many hand-installed distributions, if you
-  want Imperial units.
-
-If the specific backend requires an API key, there will be a `-k`, `--apikey`
-parameter to specify the key.
+A systemd user unit will be available soon.

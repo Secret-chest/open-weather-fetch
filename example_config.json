@@ -1,0 +1,8 @@
+[
+    {
+        "location": "Timișoara",
+        "source": "openweathermap",
+        "apikey": "",
+        "interval": 1200
+    }
+]
