@@ -21,7 +21,7 @@ And define "weather information" like this:
 * `temp_value`: numeric value of temperature
 * `icon_name`: freedesktop.org icon name for the weather state
 * `conditions`: textual description
-* `icon`: path to a suitable icon file
+* `icon`: full path to a suitable icon file for the weather state
 * `prec`: quantity of precipitation for the given period (for the current conditions, it is for 1 hour)
 * `coverage`: percentage of cloud coverage
 * `pop`: probability of precipitation
