@@ -160,9 +160,13 @@ def get_weather_info():
     if weather["api_key"] is None:
         print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Set OpenWeatherMap api key to enable weather updates.")
         return
-    if weather["location_key"] is None:
-        print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Set OpenWeatherMap location to get localized weather updates.")
-        return
+    if weather["lat"] is None or weather["lon"] is None:
+        if weather["location_key"] is None:
+            print(f"{datetime.now().strftime('[%H:%M:%S]')} openweather: Set OpenWeatherMap location to get localized weather updates.")
+            return
+        query_start = f"?q={str(weather["location_key"])}"
+    else:
+        query_start = f"?lat={str(weather["lat"])}&lon={str(weather["lon"])}"
 
     current_time = datetime.now().time()
     formatted_time = current_time.strftime("%l:%M:%S")
@@ -172,9 +176,9 @@ def get_weather_info():
         units = "metric"
     else:
         units = "imperial"
-    weather_data_url = "http://api.openweathermap.org/data/2.5/weather?q=" + str(weather["location_key"]) + "&units=" + units + "&appid=" + str(weather["api_key"])
+    weather_data_url = "http://api.openweathermap.org/data/2.5/weather" + query_start + "&units=" + units + "&appid=" + str(weather["api_key"])
     weather_data = json.loads(requests.get(weather_data_url).content)
-    forecast_data_url = "http://api.openweathermap.org/data/2.5/forecast?q=" + str(weather["location_key"]) + "&units=" + units + "&appid=" + str(weather["api_key"])
+    forecast_data_url = "http://api.openweathermap.org/data/2.5/forecast" + query_start + "&units=" + units + "&appid=" + str(weather["api_key"])
     forecast_data = json.loads(requests.get(forecast_data_url).content)
     if weather["debug"]:
         print(weather_data)
@@ -206,7 +210,7 @@ def get_weather_info():
         "icon": get_icon_path(weather_data["weather"][0]["icon"]),
         "pres": weather_data["main"]["pressure"],
         "hum": weather_data["main"]["humidity"],
-        "visi": weather_data["visibility"],
+        "visi": weather_data.get("visibility"),
         "wind": weather_data["wind"]["speed"],
         "wind_source": weather_data["wind"]["deg"],
         "wind_gust": weather_data["wind"].get("gust"),
@@ -246,8 +250,10 @@ def get_measurement_type_for_gnu():
         return "metric"
     return "imperial"
 
-def fetch_weather(location, apikey, i, classic_icons=False, units=None, debug=False):
+def fetch_weather(apikey, i, classic_icons=False, units=None, debug=False, location=None, lat=None, lon=None):
     weather["location_key"] = location
+    weather["lat"] = lat
+    weather["lon"] = lon
     weather["api_key"] = apikey
     weather["classic-icons"] = classic_icons
     weather["basename"] = str(i)

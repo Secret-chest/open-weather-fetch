@@ -70,7 +70,7 @@ class WeatherUpdater(Gio.Application):
 
                 GLib.timeout_add_seconds(location["interval"], lambda: module.fetch_weather(**settings) or True)
 
-                print(f"{datetime.now().strftime('[%H:%M:%S]')} Downloaded weather data for {location["location"]}")
+                print(f"{datetime.now().strftime('[%H:%M:%S]')} Downloaded weather data for {location.get("location")}")
 
     def do_startup(self):
         Gio.Application.do_startup(self)

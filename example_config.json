@@ -9,6 +9,8 @@
         },
         {
             "location": "Deva",
+            "lat": 45.878,
+            "lon": 22.914,
             "source": "openweathermap",
             "apikey": "",
             "interval": 1200
