@@ -68,7 +68,8 @@ class WeatherUpdater(Gio.Application):
                 del settings["source"], settings["interval"]
                 module.fetch_weather(**settings, i=i)
 
-                GLib.timeout_add_seconds(location["interval"], lambda: module.fetch_weather(**settings) or True)
+                if location["interval"] > 0:
+                    GLib.timeout_add_seconds(location["interval"], lambda: module.fetch_weather(**settings) or True)
 
                 print(f"{datetime.now().strftime('[%H:%M:%S]')} Downloaded weather data for {location.get("location")}")
 

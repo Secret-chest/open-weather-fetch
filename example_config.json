@@ -13,7 +13,7 @@
             "lon": 22.914,
             "source": "openweathermap",
             "apikey": "",
-            "interval": 1200
+            "interval": -1
         }
     ]
 }
