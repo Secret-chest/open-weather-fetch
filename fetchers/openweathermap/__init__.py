@@ -237,7 +237,8 @@ def get_weather_info():
                 "visi": data.get("visibility"),
             }
             for data in forecast_data["list"]
-        ]
+        ],
+        "attribution": "OpenWeatherMap.org — Attribution Share-Alike 4.0"
     }
     with open(weather["data_directory"] + "/locations/" + f"{weather['basename']}.json", "w") as file:
         json.dump(data, file, indent=4)
