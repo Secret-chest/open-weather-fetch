@@ -3,8 +3,8 @@ Description="Weather data fetching"
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/weather-fetch
+ExecStart=@bindir@/weather-fetch
 Restart=on-failure
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

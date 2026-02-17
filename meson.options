@@ -1,0 +1,6 @@
+option(
+    'systemd_prefix',
+    type: 'string',
+    value: '/etc',
+    description: 'Directory where the systemd configuration is located'
+)

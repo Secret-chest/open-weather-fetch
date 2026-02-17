@@ -10,6 +10,10 @@ from datetime import datetime
 from pathlib import Path
 from gi.repository import GLib, Gio, GObject
 
+
+module_directory = Path(__file__).resolve().parent
+
+
 def load_packages_from_dir(dir_path: Path):
     loaded_modules = []
     for path in dir_path.iterdir():
@@ -40,9 +44,9 @@ class WeatherUpdater(Gio.Application):
         )
 
         self.config_path = Path(os.environ.get("XDG_CONFIG_HOME") or "~/.config").expanduser() / "owf" / "config.json"
-        self.fetcher_paths = ([Path(os.environ.get("XDG_DATA_HOME") or "~/.local/share").expanduser() / "owf" / "fetchers"]
-                              + ([Path(p) / "owf" / "fetchers" for p in os.environ.get("XDG_DATA_DIRS").split(":")] if "XDG_DATA_DIRS" in os.environ
-                                else [Path("/") / "usr" / "share" / "owf" / "fetchers"]))
+        self.fetcher_paths = (([Path(p) / "owf" / "fetchers" for p in os.environ.get("XDG_DATA_DIRS").split(":")] if "XDG_DATA_DIRS" in os.environ
+                                else [Path("/") / "usr" / "share" / "owf" / "fetchers"])
+                              + [module_directory.parent / "share" / "owf" / "fetchers"] + [Path(os.environ.get("XDG_DATA_HOME") or "~/.local/share").expanduser() / "owf" / "fetchers"])
         self.data_path = Path(os.environ.get("XDG_DATA_HOME") or "~/.local/share").expanduser() / "owf" / "data"
 
         self.modules_list = []
@@ -61,7 +65,7 @@ class WeatherUpdater(Gio.Application):
             data = json.load(f)
             (self.data_path / "locations").mkdir(parents=True, exist_ok=True)
             # Create the symlink
-            if (self.data_path / "data.json").exists():
+            if (self.data_path / "data.json").is_symlink():
                 (self.data_path / "data.json").unlink()
             os.symlink(self.data_path / "locations" / f"{data['main_location']}.json", self.data_path / "data.json")
             for i, location in enumerate(data["locations"]):
