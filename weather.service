@@ -3,7 +3,7 @@ Description="Weather data fetching"
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/weather-fetch.py
+ExecStart=/usr/bin/weather-fetch
 Restart=on-failure
 
 [Install]
