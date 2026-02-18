@@ -12,6 +12,30 @@ This means that multiple clients can use the data instantly without
 worrying about weather sevice usage limits and the caveats of configuring
 weather services and connecting to the network.
 
+## Configuration
+
+### OpenWeatherMap
+
+OpenWeatherMap Free API Key Signup
+
+1) Navigate to https://home.openweathermap.org/users/sign_up
+
+2) Fill out the form
+
+3) Complete the captcha
+
+4) Click Create Account button
+
+5) Check email and verify account
+
+6) Wait about 2 hours for the key to become active
+
+7) Navigate to https://home.openweathermap.org/api_keys
+
+8) Copy the Default API key for use
+
+9) Install the API key into ~/.config/owf/config.json using example_config.json as a template
+
 ## Installation
 
 `git clone https://github.com/Secret-chest/open-weather-fetch`
