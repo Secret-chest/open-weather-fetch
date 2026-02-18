@@ -1,3 +1,5 @@
+<img width="64" height="38" alt="owf" src="https://github.com/user-attachments/assets/2155b8c4-86c4-4292-9aca-f251774982d9" />
+
 # open-weather-fetch
 
 Open Weather Fetch is a collection of scripts that fetch local weather and
