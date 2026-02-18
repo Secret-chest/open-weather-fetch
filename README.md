@@ -21,12 +21,12 @@ windowed weather app might want to read all cities.
 ## Downloading weather data
 
 Just run the provided `weather.py` after putting the `fetchers` in
-`~/.local/share/weather/fetchers` and the config in
-`~/.config/weather/config.json`. The fetchers can also be in
-`/usr/share/weather/fetchers` if you want to install this system-wide.
+`~/.local/share/owf/fetchers` and the config in
+`~/.config/owf/config.json`. The fetchers can also be in
+`/usr/share/owf/fetchers` if you want to install this system-wide.
 
 ## Installation
 
 You can use the provided `weather.service` as a user unit for systemd and put
-the fetchers in `/usr/share/weather/fetchers`, and the `weather.py` in
-`/usr/bin/weather-fetch.py`. Enable the user unit, and it should run.
+the fetchers in `/usr/share/owf/fetchers`, and the `weather.py` in
+`/usr/bin/open-weather-fetch`. Enable the user unit, and it should run.
